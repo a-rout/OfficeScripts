@@ -12,8 +12,8 @@ function main(workbook: ExcelScript.Workbook) {
     let selectedCell: ExcelScript.Range = workbook.getSelectedRange();
 
     // Set values for the selected cell and adjacent cells
-    selectedCell.setValue("Hello"); // Change it according to you
-    selectedCell.getOffsetRange(0, 1).setValue("Bye");  // Change it according to you
+    selectedCell.setValue("Hello");
+    selectedCell.getOffsetRange(0, 1).setValue("Bye");
 
     let currentDateInMonth: Date = new Date(year, month - 1, 1);
     let endDate: Date = new Date(year, month, 0);
@@ -29,6 +29,10 @@ function main(workbook: ExcelScript.Workbook) {
     // Join the dates into a single string with comma separation
     let datesString: string = weekdays.join(", ");
 
-    // Set the joined string in the cell next to the "Bye" cell
-    selectedCell.getOffsetRange(0, 2).setValue(datesString);
+    // Set the joined string in the 4th cell
+    selectedCell.getOffsetRange(0, 3).setValue(datesString);
+
+    // Insert a formula in the 3rd cell to count the commas in the 4th cell
+    let countCommasFormula: string = `=LEN(${selectedCell.getOffsetRange(0, 3).getAddress()}) - LEN(SUBSTITUTE(${selectedCell.getOffsetRange(0, 3).getAddress()}, ",", ""))`;
+    selectedCell.getOffsetRange(0, 2).setFormula(countCommasFormula);
 }
