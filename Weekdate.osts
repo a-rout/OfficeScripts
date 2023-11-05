@@ -33,6 +33,6 @@ function main(workbook: ExcelScript.Workbook) {
     selectedCell.getOffsetRange(0, 3).setValue(datesString);
 
     // Insert a formula in the 3rd cell to count the commas in the 4th cell
-    let countCommasFormula: string = `=LEN(${selectedCell.getOffsetRange(0, 3).getAddress()}) - LEN(SUBSTITUTE(${selectedCell.getOffsetRange(0, 3).getAddress()}, ",", ""))`;
+    let countCommasFormula: string = `=LEN(${selectedCell.getOffsetRange(0, 3).getAddress()}) - LEN(SUBSTITUTE(${selectedCell.getOffsetRange(0, 3).getAddress()}, ",", ""))+1`;
     selectedCell.getOffsetRange(0, 2).setFormula(countCommasFormula);
 }
