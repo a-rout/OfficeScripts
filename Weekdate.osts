@@ -1,1 +1,34 @@
-{"version":"0.2.0","body":"function main(workbook: ExcelScript.Workbook) {\n    // Specify the year and month.\n    let year: number = 2023;\n    let month: number = 11;\n\n    let worksheet: ExcelScript.Worksheet = workbook.getActiveWorksheet();\n    let range: ExcelScript.Range = worksheet.getRange(\"A1\"); // Adjust the cell where you want the data to be displayed.\n\n    let currentDate: Date = new Date(year, month - 1, 1);\n    let endDate: Date = new Date(year, month, 0);\n    let weekdays: string[] = [];\n\n    while (currentDate <= endDate) {\n        if (currentDate.getDay() >= 1 && currentDate.getDay() <= 5) { // Monday to Friday\n            weekdays.push(currentDate.getDate().toString());\n        }\n        currentDate.setDate(currentDate.getDate() + 1);\n    }\n\n    // Join the dates into a single string with comma separation\n    let datesString: string = weekdays.join(\",\");\n\n    // Set the joined string in the range\n    range.setValue(datesString);\n}\n","description":"","parameterInfo":"{\"version\":1,\"originalParameterOrder\":[],\"parameterSchema\":{\"type\":\"object\",\"default\":{},\"x-ms-visibility\":\"internal\"},\"returnSchema\":{\"type\":\"object\",\"properties\":{}},\"signature\":{\"comment\":\"\",\"parameters\":[{\"name\":\"workbook\",\"comment\":\"\"}]}}","apiInfo":"{\"variant\":\"synchronous\",\"variantVersion\":2}"}
+function main(workbook: ExcelScript.Workbook) {
+    // Get the current date
+    let currentDate: Date = new Date();
+
+    // Extract the current year and month from the current date
+    let year: number = currentDate.getFullYear();
+    let month: number = currentDate.getMonth() + 1; // Adding 1 since months are zero-based (0 for January, 1 for February, etc.)
+
+    let worksheet: ExcelScript.Worksheet = workbook.getActiveWorksheet();
+
+    // Get the currently selected cell
+    let selectedCell: ExcelScript.Range = workbook.getSelectedRange();
+
+    // Set values for the selected cell and adjacent cells
+    selectedCell.setValue("Hello"); // Change it according to you
+    selectedCell.getOffsetRange(0, 1).setValue("Bye");  // Change it according to you
+
+    let currentDateInMonth: Date = new Date(year, month - 1, 1);
+    let endDate: Date = new Date(year, month, 0);
+    let weekdays: string[] = [];
+
+    while (currentDateInMonth <= endDate) {
+        if (currentDateInMonth.getDay() >= 1 && currentDateInMonth.getDay() <= 5) { // Monday to Friday
+            weekdays.push(currentDateInMonth.getDate().toString());
+        }
+        currentDateInMonth.setDate(currentDateInMonth.getDate() + 1);
+    }
+
+    // Join the dates into a single string with comma separation
+    let datesString: string = weekdays.join(", ");
+
+    // Set the joined string in the cell next to the "Bye" cell
+    selectedCell.getOffsetRange(0, 2).setValue(datesString);
+}
