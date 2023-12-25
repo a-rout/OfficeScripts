@@ -1,0 +1,41 @@
+function main(workbook: ExcelScript.Workbook) {
+    // Get the first sheet in the workbook
+    let firstSheet = workbook.getWorksheets()[0];
+
+    // Get all the shapes (including images) in the first sheet
+    let shapes = firstSheet.getShapes();
+
+    // Delete each shape (image) in the first sheet
+    for (let i = shapes.length - 1; i >= 0; i--) {
+        shapes[i].delete();
+    }
+
+    // Clear the contents and formatting of the first sheet if it's not already blank
+    let usedRange = firstSheet.getUsedRange();
+    if (usedRange) {
+        usedRange.clear(ExcelScript.ClearApplyTo.all);
+    }
+
+    // Select cell A1 in the first sheet
+    let cellA1 = firstSheet.getRange("A1");
+    cellA1.select();
+
+    // Get the last sheet in the workbook
+    let lastSheet = workbook.getWorksheets()[workbook.getWorksheets().length - 1];
+
+    // Get the current month name
+    let currentDate = new Date();
+    let currentMonthName = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(currentDate);
+
+    // Change the name of the last sheet to the current month
+    lastSheet.setName(currentMonthName);
+
+    // Clear the contents of cells from C2 to D14 in the last sheet while keeping the formatting
+    let rangeToClearLastSheet = lastSheet.getRange("C2:E40");
+    rangeToClearLastSheet.clear(ExcelScript.ClearApplyTo.contents);
+
+
+    // Select cell A1 in the first sheet
+  let cellC2 = lastSheet.getRange("C2");
+    cellC2.select();
+}
